@@ -51,9 +51,17 @@ class SchemaParser {
     for (const table of tables) {
       const tableName = table.getAttribute('name');
       const tableAttrs = {};
+      
+      // Collect attributes in a consistent way (alphabetically)
+      const attrNames = [];
       for (const attr of table.attributes) {
-        if (attr.name !== 'name') {
-          tableAttrs[attr.name] = attr.value;
+        attrNames.push(attr.name);
+      }
+      attrNames.sort();
+      
+      for (const attrName of attrNames) {
+        if (attrName !== 'name') {
+          tableAttrs[attrName] = table.getAttribute(attrName);
         }
       }
 
@@ -62,11 +70,20 @@ class SchemaParser {
       for (const column of columnElements) {
         const colName = column.getAttribute('name');
         const colAttrs = {};
+        
+        // Collect column attributes in a consistent way (alphabetically)
+        const colAttrNames = [];
         for (const attr of column.attributes) {
-          if (attr.name !== 'name') {
-            colAttrs[attr.name] = attr.value;
+          colAttrNames.push(attr.name);
+        }
+        colAttrNames.sort();
+        
+        for (const attrName of colAttrNames) {
+          if (attrName !== 'name') {
+            colAttrs[attrName] = column.getAttribute(attrName);
           }
         }
+        
         columns[colName] = colAttrs;
       }
 
@@ -99,11 +116,20 @@ class SchemaParser {
     for (const plan of loadPlans) {
       const table = plan.getAttribute('table');
       const details = {};
+      
+      // Collect load plan attributes in a consistent way (alphabetically)
+      const attrNames = [];
       for (const attr of plan.attributes) {
-        if (attr.name !== 'table') {
-          details[attr.name] = attr.value;
+        attrNames.push(attr.name);
+      }
+      attrNames.sort();
+      
+      for (const attrName of attrNames) {
+        if (attrName !== 'table') {
+          details[attrName] = plan.getAttribute(attrName);
         }
       }
+      
       schema.loadPlans[table] = details;
     }
 
